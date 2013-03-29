@@ -4,6 +4,7 @@ using objectified_solutions.source;
 namespace objectified_solutions.project {
     public class ProjectObject {
         public string Name { get; set; }
+        public string RelativePath { get; set; }
         public string OutputType { get; set; }
         public string Configuration { get; set; }
         public string Platform { get; set; }
