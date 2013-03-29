@@ -11,8 +11,12 @@ namespace objectified_solutions.project {
         public string ProductVersion { get; set; }
         public string RootNamespace { get; set; }
         public string TargetFrameworkVersion { get; set; }
-        public bool SpecificVersion { get; set; }
+        public string SchemaVersion { get; set; }
+        public string ProjectGuid { get; set; }
+        
+        //Reference Details
         public string HintPath { get; set; }
+        public bool SpecificVersion { get; set; }
         
         public List<SourceCodeFile> SourceCodeFiles { get; set; }
         public List<ProjectObject> ReferencedProjects { get; set; }
