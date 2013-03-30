@@ -1,9 +1,9 @@
 ﻿namespace objectified_solutions.parsers {
     public class CSProjLine {
+        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eStoreAdminBLL", "eStoreAdminBLL\eStoreAdminBLL.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
         public string Name { get; set; }
         public string RelativePath { get; set; }
-
-        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eStoreAdminBLL", "eStoreAdminBLL\eStoreAdminBLL.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
+        
         public CSProjLine(string line) {
             string[] tokens = line.Split(' ');
             Name = RemoveQuotes(RemoveTrailingComma(tokens[2]));

@@ -40,6 +40,9 @@
     <Compile Include="parsers\CSProjFileParser.cs" />
     <Compile Include="parsers\CSProjLine.cs" />
     <Compile Include="project\ProjectObject.cs" />
+    <Compile Include="project\ProjectReference.cs" />
+    <Compile Include="project\Reference.cs" />
+    <Compile Include="project\ReferenceBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="parsers\SLNFileParser.cs" />
     <Compile Include="solution\SolutionObject.cs" />

@@ -23,7 +23,6 @@ namespace objectified_solutions.solution {
 
         private string GetName(string slnFile) {
             int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH);
-            //int lastDot = slnFile.LastIndexOf(Constants.DOT);
             return slnFile.Substring(lastSlash + 1);
         }
 
