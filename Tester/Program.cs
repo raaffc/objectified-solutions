@@ -21,8 +21,12 @@ namespace Tester {
                 Console.WriteLine("Solution location: {0}", slnObj.RootPath);
                 Console.WriteLine("Projects in {0} solution:", slnObj.Name);
                 foreach(ProjectObject project in slnObj.Projects) {
-                    Console.WriteLine("Name: {0}", project.Name);
+                    Console.WriteLine(project.Name);
                     Console.WriteLine("RelativePath: {0}", project.RelativePath);
+                    Console.WriteLine("Number of Source Files: {0}", project.SourceFiles.Count);
+                    Console.WriteLine("Number of System References: {0}", project.References.Count);
+                    Console.WriteLine("Number of Project References: {0}", project.ProjectReferences.Count);
+                    Console.WriteLine("-------------");
                 }
                 Console.WriteLine("End Program");
             }
