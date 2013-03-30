@@ -12,19 +12,18 @@ namespace objectified_solutions.parsers {
 
             XmlNodeList propertyGroupList = doc.SelectNodes("//msbuild:Project/msbuild:PropertyGroup", nsmgr);
             XmlNode properties = propertyGroupList[0];
-            project.OutputType = GetProperty(properties, "OutputType");
-            project.Configuration = GetProperty(properties, "Configuration");
-            project.Platform = GetProperty(properties, "Platform");
-            project.ProductVersion = GetProperty(properties, "ProductVersion");
-            project.RootNamespace = GetProperty(properties, "RootNamespace");
-            project.TargetFrameworkVersion = GetProperty(properties, "TargetFrameworkVersion");
-            project.SchemaVersion = GetProperty(properties, "SchemaVersion");
-            project.ProjectGuid = GetProperty(properties, "ProjectGuid");
+            project.OutputType = GetProperty(properties, Constants.PROPERTY_OUTPUTTYPE);
+            project.Configuration = GetProperty(properties, Constants.PROPERTY_CONFIGURATION);
+            project.Platform = GetProperty(properties, Constants.PROPERTY_PLATFORM);
+            project.ProductVersion = GetProperty(properties, Constants.PROPERTY_PRODUCTVERSION);
+            project.RootNamespace = GetProperty(properties, Constants.PROPERTY_ROOTNAMESPACE);
+            project.TargetFrameworkVersion = GetProperty(properties, Constants.PROPERTY_TARGETFRAMEWORKVERSION);
+            project.SchemaVersion = GetProperty(properties, Constants.PROPERTY_SCHEMAVERSION);
+            project.ProjectGuid = GetProperty(properties, Constants.PROPERTY_PROJECTGUID);
 
             XmlNodeList itemGroups = doc.SelectNodes("//msbuild:Project/msbuild:ItemGroup", nsmgr);
             ProcessItemGroups(itemGroups, project);
         }
-
 
         private static void ProcessItemGroups(XmlNodeList itemGroups, ProjectObject project) {
             project.References = new List<Reference>();
@@ -34,54 +33,52 @@ namespace objectified_solutions.parsers {
                 XmlNodeList childNodes = itemGroup.ChildNodes;
                 if(childNodes.Count > 0) {
                     switch(childNodes[0].Name) {
-                        case "Reference":
+                        case Constants.ITEM_GROUP_REFERENCE:
                             foreach(XmlNode childNode in childNodes) {
                                 string name = GetName(childNode.Attributes[0]);
                                 bool specificVersion;
                                 string specificVersionString;
-                                specificVersionString = GetProperty(childNode, "SpecificVersion");
+                                specificVersionString = GetProperty(childNode, Constants.PROPERTY_SPECIFICVERSION);
                                 if(specificVersionString != string.Empty) {
-                                    specificVersion = bool.Parse(GetProperty(childNode, "SpecificVersion"));
+                                    specificVersion = bool.Parse(specificVersionString);
                                 } else {
                                     specificVersion = false;
                                 }
-                                string hintPath = GetProperty(childNode, "HintPath");
+                                string hintPath = GetProperty(childNode, Constants.PROPERTY_HINTPATH);
                                 Reference reference = new Reference { Name = name, SpecificVersion = specificVersion, HintPath = hintPath };
                                 project.References.Add(reference);
                             }
                             break;
-                        case "Compile":
-                            //SourceCodeFiles //List<SourceCodeFile>
+                        case Constants.ITEM_GROUP_COMPILE:
                             foreach(XmlNode childNode in childNodes) {
                                 string filename = GetName(childNode.Attributes[0]);
                                 string relativePath = GetRelativePath(childNode.Attributes[0]);
-                                string dependentUpon = GetProperty(childNode, "DependentUpon");
-                                string subType = GetProperty(childNode, "SubType");
+                                string dependentUpon = GetProperty(childNode, Constants.PROPERTY_DEPENDENTUPON);
+                                string subType = GetProperty(childNode, Constants.PROPERTY_SUBTYPE);
                                 SourceCodeFile sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = true, DependentUpon = dependentUpon, SubType = subType };
                                 project.SourceFiles.Add(sourceFile);
                             }
                             break;
-                        case "Content":
-                            //SourceCodeFiles //List<SourceCodeFile>
+                        case Constants.ITEM_GROUP_CONTENT:
                             foreach(XmlNode childNode in childNodes) {
                                 string filename = GetName(childNode.Attributes[0]);
                                 string relativePath = GetRelativePath(childNode.Attributes[0]);
-                                string subType = GetProperty(childNode, "SubType");
-                                string copyToOutputDirectory = GetProperty(childNode, "CopyToOutputDirectory");
+                                string subType = GetProperty(childNode, Constants.PROPERTY_SUBTYPE);
+                                string copyToOutputDirectory = GetProperty(childNode, Constants.PROPERTY_COPYTOOUTPUTDIRECTORY);
                                 SourceCodeFile sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = false, SubType = subType, CopyToOutputDirectory = copyToOutputDirectory };
                                 project.SourceFiles.Add(sourceFile);
                             }
                             break;
-                        case "ProjectReference":
+                        case Constants.ITEM_GROUP_PROJECTREFERENCE:
                             foreach(XmlNode childNode in childNodes) {
-                                string name = GetProperty(childNode, "Name");
-                                string projectGuid = GetProperty(childNode, "Project");
+                                string name = GetProperty(childNode, Constants.PROPERTY_NAME);
+                                string projectGuid = GetProperty(childNode, Constants.PROPERTY_PROJECT);
                                 string relativePath = GetRelativePath(childNode.Attributes[0]);
                                 ProjectReference projectReference = new ProjectReference { Name = name, ProjectGuid = projectGuid, RelativePath = relativePath };
                                 project.ProjectReferences.Add(projectReference);
                             }
                             break;
-                        case "BootstrapperPackage":
+                        case Constants.ITEM_GROUP_BOOTSTRAPPERPACKAGE:
                             break;
                     }
                 }
@@ -108,7 +105,7 @@ namespace objectified_solutions.parsers {
 
         private static XmlNamespaceManager GetNsMgr(string csprojFile) {
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(new XmlTextReader(csprojFile).NameTable);
-            nsmgr.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003");
+            nsmgr.AddNamespace(Constants.MSBUILD, "http://schemas.microsoft.com/developer/msbuild/2003");
             nsmgr.PushScope();
             return nsmgr;
         }

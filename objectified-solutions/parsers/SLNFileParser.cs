@@ -9,8 +9,8 @@ namespace objectified_solutions.parsers {
             List<string> lines = new List<string>(File.ReadAllLines(slnFile));
             SolutionObject slnObj = new SolutionObject(slnFile, lines);
             
-            List<string> projectlines = ApplyFilter(lines, "Project", null);
-            List<string> csprojlines = ApplyFilter(projectlines, null, "csproj");
+            List<string> projectlines = ApplyFilter(lines, Constants.PROJECT, null);
+            List<string> csprojlines = ApplyFilter(projectlines, null, Constants.CSPROJ);
 
             List<ProjectObject> projects = new List<ProjectObject>();
             foreach(string line in csprojlines) {
@@ -18,7 +18,6 @@ namespace objectified_solutions.parsers {
                 ProjectObject project = new ProjectObject { Name = csprojline.Name, RelativePath = csprojline.RelativePath };
                 projects.Add(project);
             }
-
             slnObj.Projects = projects;
             return slnObj;
         }
@@ -38,7 +37,6 @@ namespace objectified_solutions.parsers {
                     }
                 }
             }
-
             return filteredLines;
         }
     }
