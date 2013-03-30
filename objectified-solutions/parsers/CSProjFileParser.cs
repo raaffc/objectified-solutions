@@ -34,54 +34,59 @@ namespace objectified_solutions.parsers {
                 if(childNodes.Count > 0) {
                     switch(childNodes[0].Name) {
                         case Constants.ITEM_GROUP_REFERENCE:
-                            foreach(XmlNode childNode in childNodes) {
-                                string name = GetName(childNode.Attributes[0]);
-                                bool specificVersion;
-                                string specificVersionString;
-                                specificVersionString = GetProperty(childNode, Constants.PROPERTY_SPECIFICVERSION);
-                                if(specificVersionString != string.Empty) {
-                                    specificVersion = bool.Parse(specificVersionString);
-                                } else {
-                                    specificVersion = false;
-                                }
-                                string hintPath = GetProperty(childNode, Constants.PROPERTY_HINTPATH);
-                                Reference reference = new Reference { Name = name, SpecificVersion = specificVersion, HintPath = hintPath };
-                                project.References.Add(reference);
-                            }
+                            ProcessReferenceItems(childNodes, project);
                             break;
                         case Constants.ITEM_GROUP_COMPILE:
-                            foreach(XmlNode childNode in childNodes) {
-                                string filename = GetName(childNode.Attributes[0]);
-                                string relativePath = GetRelativePath(childNode.Attributes[0]);
-                                string dependentUpon = GetProperty(childNode, Constants.PROPERTY_DEPENDENTUPON);
-                                string subType = GetProperty(childNode, Constants.PROPERTY_SUBTYPE);
-                                SourceCodeFile sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = true, DependentUpon = dependentUpon, SubType = subType };
-                                project.SourceFiles.Add(sourceFile);
-                            }
+                            ProcessSourceItems(childNodes, project, Constants.ITEM_GROUP_COMPILE);
                             break;
                         case Constants.ITEM_GROUP_CONTENT:
-                            foreach(XmlNode childNode in childNodes) {
-                                string filename = GetName(childNode.Attributes[0]);
-                                string relativePath = GetRelativePath(childNode.Attributes[0]);
-                                string subType = GetProperty(childNode, Constants.PROPERTY_SUBTYPE);
-                                string copyToOutputDirectory = GetProperty(childNode, Constants.PROPERTY_COPYTOOUTPUTDIRECTORY);
-                                SourceCodeFile sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = false, SubType = subType, CopyToOutputDirectory = copyToOutputDirectory };
-                                project.SourceFiles.Add(sourceFile);
-                            }
+                            ProcessSourceItems(childNodes, project, Constants.ITEM_GROUP_CONTENT);
                             break;
                         case Constants.ITEM_GROUP_PROJECTREFERENCE:
-                            foreach(XmlNode childNode in childNodes) {
-                                string name = GetProperty(childNode, Constants.PROPERTY_NAME);
-                                string projectGuid = GetProperty(childNode, Constants.PROPERTY_PROJECT);
-                                string relativePath = GetRelativePath(childNode.Attributes[0]);
-                                ProjectReference projectReference = new ProjectReference { Name = name, ProjectGuid = projectGuid, RelativePath = relativePath };
-                                project.ProjectReferences.Add(projectReference);
-                            }
+                            ProcessProjectReferenceItems(childNodes, project);
                             break;
                         case Constants.ITEM_GROUP_BOOTSTRAPPERPACKAGE:
                             break;
                     }
                 }
+            }
+        }
+
+        private static void ProcessReferenceItems(XmlNodeList nodes, ProjectObject project) {
+            foreach (XmlNode node in nodes) {
+                string name = GetName(node.Attributes[0]);
+                string specificVersionString = GetProperty(node, Constants.PROPERTY_SPECIFICVERSION);
+                bool specificVersion = specificVersionString != null && bool.Parse(specificVersionString);
+                string hintPath = GetProperty(node, Constants.PROPERTY_HINTPATH);
+                Reference reference = new Reference { Name = name, SpecificVersion = specificVersion, HintPath = hintPath };
+                project.References.Add(reference);
+            }
+        }
+
+        private static void ProcessSourceItems(XmlNodeList nodes, ProjectObject project, string itemType) {
+            foreach (XmlNode node in nodes) {
+                SourceCodeFile sourceFile;
+                string filename = GetName(node.Attributes[0]);
+                string relativePath = GetRelativePath(node.Attributes[0]);
+                string subType = GetProperty(node, Constants.PROPERTY_SUBTYPE);
+                if(itemType.Equals(Constants.ITEM_GROUP_COMPILE)) {
+                    string dependentUpon = GetProperty(node, Constants.PROPERTY_DEPENDENTUPON);
+                    sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = true, SubType = subType, DependentUpon = dependentUpon };
+                } else {
+                    string copyToOutputDirectory = GetProperty(node, Constants.PROPERTY_COPYTOOUTPUTDIRECTORY);
+                    sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = false, SubType = subType, CopyToOutputDirectory = copyToOutputDirectory };
+                }
+                project.SourceFiles.Add(sourceFile);
+            }
+        } 
+
+        private static void ProcessProjectReferenceItems(XmlNodeList nodes, ProjectObject project) {
+            foreach (XmlNode node in nodes) {
+                string name = GetProperty(node, Constants.PROPERTY_NAME);
+                string projectGuid = GetProperty(node, Constants.PROPERTY_PROJECT);
+                string relativePath = GetRelativePath(node.Attributes[0]);
+                ProjectReference projectReference = new ProjectReference { Name = name, ProjectGuid = projectGuid, RelativePath = relativePath };
+                project.ProjectReferences.Add(projectReference);
             }
         }
 
@@ -111,8 +116,7 @@ namespace objectified_solutions.parsers {
         }
 
         private static string GetProperty(XmlNode properties, string property){
-            string value = string.Empty;
-            XmlDocument doc = new XmlDocument();
+            string value = null;
             foreach(XmlNode childNode in properties.ChildNodes){
                 if(childNode.Name.Equals(property)) {
                     value = childNode.InnerText;
