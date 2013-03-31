@@ -9,13 +9,9 @@ namespace Tester {
             if(args.Length != 1) {
                 Console.WriteLine("Usage: Tester <path to .sln file>.");
             } else {
-                SolutionObject slnObj = SLNFileParser.Parse(args[0]);
+                //SolutionObject slnObj = SLNFileParser.Parse(args[0]);
+                SolutionObject slnObj = new SolutionObject(args[0]);
 
-                //Now, fill out the projects
-                foreach(ProjectObject project in slnObj.Projects) {
-                    CSProjFileParser.Parse(slnObj.RootPath + project.RelativePath, project);
-                }
-                
                 Console.WriteLine("Solution Format Version: {0}", slnObj.FormatVersion);
                 Console.WriteLine("Solution will open in {0}", slnObj.VSVersion);
                 Console.WriteLine("Solution location: {0}", slnObj.RootPath);
