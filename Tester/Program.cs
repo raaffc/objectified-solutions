@@ -9,7 +9,6 @@ namespace Tester {
             if(args.Length != 1) {
                 Console.WriteLine("Usage: Tester <path to .sln file>.");
             } else {
-                //SolutionObject slnObj = SLNFileParser.Parse(args[0]);
                 SolutionObject slnObj = new SolutionObject(args[0]);
 
                 Console.WriteLine("Solution Format Version: {0}", slnObj.FormatVersion);
