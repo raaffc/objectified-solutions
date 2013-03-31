@@ -1,0 +1,26 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>objectified-solutions</id>
+    <version>1.0.0.0</version>
+    <title>objectified-solutions</title>
+    <authors>Andrew Gray</authors>
+    <owners>Andrew Gray</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Solution File Object Modeller
+      objectified-solutions produces an navigatable object graph of an Visual Studio solution (.sln file)
+      and subordinate project(s) (.csproj file(s)).
+    </description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>Solution Object Model</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework="net40" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="bin\Release\objectified-solutions.dll" target="lib\net40\" />
+  </files>
+</package>
