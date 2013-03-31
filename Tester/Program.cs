@@ -11,7 +11,7 @@ namespace Tester {
             } else {
                 SolutionObject slnObj = SLNFileParser.Parse(args[0]);
 
-                //Fill out the projects
+                //Now, fill out the projects
                 foreach(ProjectObject project in slnObj.Projects) {
                     CSProjFileParser.Parse(slnObj.RootPath + project.RelativePath, project);
                 }
