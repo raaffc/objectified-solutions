@@ -23,8 +23,40 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.project {
-    public abstract class ReferenceBase {
+
+using System.Collections.Generic;
+using objectified_solutions.parsers;
+
+namespace objectified_solutions.views.solutionview.solution {
+    public class SolutionFolderObject {
         public string Name { get; set; }
+        public string FolderGuid { get; set; }
+        public List<SolutionFolderObject> NestedFolders { get; set; }
+        public List<string> NestedProjects { get; set; }
+
+        public SolutionFolderObject(SolutionFolderLine solutionFolderLine, 
+                                    List<string> nestedProjectsSection,
+                                    List<string> csprojLines,
+                                    List<string> solutionFolderLines) {
+            Name = solutionFolderLine.Name;
+            FolderGuid = solutionFolderLine.FolderGuid;
+            
+            if(HasNestedFolders(solutionFolderLine.FolderGuid, nestedProjectsSection)) {
+                NestedFolders = new List<SolutionFolderObject>();
+
+            }
+
+            if(HasNestedProjects()) {
+                NestedProjects = new List<string>();
+            }
+        }
+
+        private bool HasNestedFolders(string projectGuid, List<string> nestedProjectsSection) {
+
+        }
+
+        private bool HasNestedProjects() {
+            
+        }
     }
 }

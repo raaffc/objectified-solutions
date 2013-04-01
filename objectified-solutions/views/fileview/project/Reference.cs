@@ -23,26 +23,10 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.parsers {
-    public class CSProjLine {
-        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eStoreAdminBLL", "eStoreAdminBLL\eStoreAdminBLL.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
-        public string Name { get; set; }
-        public string RelativePath { get; set; }
-        public string ProjectGuid { get; set; } //unique id
-        
-        public CSProjLine(string line) {
-            string[] tokens = line.Split(' ');
-            Name = Trim(tokens[2]);
-            RelativePath = Trim(tokens[3]);
-            ProjectGuid = TrimProjectGuid(tokens[4]);
-        }
 
-        private string Trim(string s) {
-            return s.Substring(1, s.Length - 3);
-        }
-
-        private string TrimProjectGuid(string s) {
-            return s.Substring(2, s.Length - 4);
-        }
+namespace objectified_solutions.views.fileview.project {
+    public class Reference : ReferenceBase {
+        public bool SpecificVersion { get; set; }
+        public string HintPath { get; set; }
     }
 }

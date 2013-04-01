@@ -25,8 +25,8 @@
 #endregion
 using System.Collections.Generic;
 using System.Xml;
-using objectified_solutions.project;
-using objectified_solutions.source;
+using objectified_solutions.views.fileview.project;
+using objectified_solutions.views.fileview.source;
 
 namespace objectified_solutions.parsers {
     public class CSProjFileParser {
@@ -44,7 +44,7 @@ namespace objectified_solutions.parsers {
             project.RootNamespace = GetProperty(properties, Constants.PROPERTY_ROOTNAMESPACE);
             project.TargetFrameworkVersion = GetProperty(properties, Constants.PROPERTY_TARGETFRAMEWORKVERSION);
             project.SchemaVersion = GetProperty(properties, Constants.PROPERTY_SCHEMAVERSION);
-            project.ProjectGuid = GetProperty(properties, Constants.PROPERTY_PROJECTGUID);
+            //project.ProjectGuid = GetProperty(properties, Constants.PROPERTY_PROJECTGUID);
 
             XmlNodeList itemGroups = doc.SelectNodes("//msbuild:Project/msbuild:ItemGroup", nsmgr);
             ProcessItemGroups(itemGroups, project);

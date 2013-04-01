@@ -15,3 +15,8 @@ The information currently gathered is:
 - List of System references that each project depends on
 - List of Project references that each project depends on
 - Basic properties of each source file
+
+
+General Notes:
+- FileView object is the main object of the SolutionObject
+- SolutionView picks up the NestedProjects section of the sln file. If the SolutionView object is null it means that the solution does not have any solution folders defined.

@@ -23,9 +23,21 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.project {
-    public class ProjectReference : ReferenceBase {
-        public string ProjectGuid { get; set; }
-        public string RelativePath { get; set; }
+
+namespace objectified_solutions.parsers {
+    //Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installation", "Installation", "{1BC9248A-7F32-4816-95A4-2D3DB14CA300}"
+    public class SolutionFolderLine {        
+        public string Name { get; set; }
+        public string FolderGuid { get; set; }
+
+        public SolutionFolderLine(string solutionFolderLine) {
+            string[] tokens = solutionFolderLine.Split(Constants.SPACE_CHAR);
+            Name = Trim(tokens[2], 1, tokens[2].Length - 3);
+            FolderGuid = Trim(tokens[4], 1, tokens[4].Length - 3);
+        }
+        
+        private string Trim(string s, int start, int end) {
+            return s.Substring(start, end);
+        }
     }
 }

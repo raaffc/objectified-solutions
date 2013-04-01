@@ -23,9 +23,27 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.project {
-    public class Reference : ReferenceBase {
-        public bool SpecificVersion { get; set; }
-        public string HintPath { get; set; }
+using System.Collections.Generic;
+using objectified_solutions.parsers;
+using objectified_solutions.views.fileview.project;
+
+namespace objectified_solutions.views.fileview {
+    public class FileView {
+        public List<ProjectObject> Projects { get; set; }
+
+        public FileView(List<string> lines, string rootPath) {
+            List<string> projectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
+            List<string> csprojLines = Common.ApplyFilter(projectLines, null, Constants.CSPROJ);
+
+            Projects = new List<ProjectObject>();
+            foreach (string line in csprojLines) {
+                CSProjLine csprojLine = new CSProjLine(line);
+                ProjectObject project = new ProjectObject { Name = csprojLine.Name, 
+                                                            RelativePath = csprojLine.RelativePath, 
+                                                            ProjectGuid = csprojLine.ProjectGuid};
+                CSProjFileParser.Parse(rootPath + project.RelativePath, project);
+                Projects.Add(project);
+            }
+        }
     }
 }

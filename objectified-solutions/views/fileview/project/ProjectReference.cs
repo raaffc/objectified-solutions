@@ -23,9 +23,10 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.solution {
-    public class SolutionView {
 
-
+namespace objectified_solutions.views.fileview.project {
+    public class ProjectReference : ReferenceBase {
+        public string ProjectGuid { get; set; }
+        public string RelativePath { get; set; }
     }
 }

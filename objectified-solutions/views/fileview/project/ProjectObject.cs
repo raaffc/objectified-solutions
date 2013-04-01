@@ -23,13 +23,25 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.source {
-    public class SourceCodeFile {
-        public string FileName { get; set; }
-        public bool IsCompiled { get; set; }
+
+using System.Collections.Generic;
+using objectified_solutions.views.fileview.source;
+
+namespace objectified_solutions.views.fileview.project {
+    public class ProjectObject {
+        public string Name { get; set; }
+        public string ProjectGuid { get; set; } //unique id
         public string RelativePath { get; set; }
-        public string DependentUpon { get; set; }
-        public string SubType { get; set; }
-        public string CopyToOutputDirectory { get; set; }
+        public string OutputType { get; set; }
+        public string Configuration { get; set; }
+        public string Platform { get; set; }
+        public string ProductVersion { get; set; }
+        public string RootNamespace { get; set; }
+        public string TargetFrameworkVersion { get; set; }
+        public string SchemaVersion { get; set; }
+                
+        public List<SourceCodeFile> SourceFiles { get; set; }
+        public List<Reference> References { get; set; }
+        public List<ProjectReference> ProjectReferences { get; set; }
     }
 }

@@ -34,7 +34,10 @@ namespace objectified_solutions {
 
         public const string PROJECT = "Project";
         public const string CSPROJ = "csproj";
+        public const string WIXPROJ = "wixproj";
+        public const string DTPROJ = "dtproj";
         public const string MSBUILD = "msbuild";
+        public const string NESTED_PROJECTS = "NestedProjects";
 
         public const string ITEM_GROUP_REFERENCE = "Reference";
         public const string ITEM_GROUP_CONTENT = "Content";

@@ -24,8 +24,8 @@
  */
 #endregion
 using System;
-using objectified_solutions.project;
-using objectified_solutions.solution;
+using objectified_solutions;
+using objectified_solutions.views.fileview.project;
 
 namespace Tester {
     class Program {
@@ -39,7 +39,7 @@ namespace Tester {
                 Console.WriteLine("Solution will open in {0}", slnObj.VSVersion);
                 Console.WriteLine("Solution location: {0}", slnObj.RootPath);
                 Console.WriteLine("Projects in {0} solution:", slnObj.Name);
-                foreach(ProjectObject project in slnObj.Projects) {
+                foreach(ProjectObject project in slnObj.FileView.Projects) {
                     Console.WriteLine(project.Name);
                     Console.WriteLine("RelativePath: {0}", project.RelativePath);
                     Console.WriteLine("Number of Source Files: {0}", project.SourceFiles.Count);
