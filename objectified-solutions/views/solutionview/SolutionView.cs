@@ -26,6 +26,7 @@
 
 using System.Collections.Generic;
 using objectified_solutions.parsers;
+using objectified_solutions.views.solutionview.project;
 using objectified_solutions.views.solutionview.solution;
 
 namespace objectified_solutions.views.solutionview {
@@ -35,54 +36,36 @@ namespace objectified_solutions.views.solutionview {
 
         public SolutionView(List<string> lines, string rootPath) {
             List<string> allProjectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
-            List<string> solutionFolderLines = Common.GetSolutionFolders(allProjectLines);
+            //List<string> solutionFolderLines = Common.GetSolutionFolders(allProjectLines);
             List<string> csprojLines = Common.ApplyFilter(allProjectLines, null, Constants.CSPROJ);
-            List<string> nestedProjectsSection = Common.GetNestedProjects(lines);
 
-            SolutionFolders = new List<SolutionFolderObject>();
-            foreach(string line in solutionFolderLines) {
-                SolutionFolderLine solutionFolderLine = new SolutionFolderLine(line);
-                SolutionFolderObject solutionFolder = new SolutionFolderObject(solutionFolderLine, 
-                                                                               nestedProjectsSection,
-                                                                               csprojLines,
-                                                                               solutionFolderLines);
-                SolutionFolders.Add(solutionFolder);
-            }
+            List<string> nestedProjectLines = Common.GetNestedProjectsSectionAsLines(lines);
+            NestedProjectCollection nestedProjectCollection = new NestedProjectCollection(nestedProjectLines);
+            SolutionFolders = BuildSolutionFoldersSkeleton(nestedProjectCollection.RootParents);
 
-            ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines, SolutionFolders);
+            //TODO: Fill out SolutionFolders
+
+            ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines, nestedProjectCollection.NestedProjects);
         }
 
-        private List<string> BuildListOfProjectsNotInASolutionFolder(List<string> csprojLines, List<SolutionFolderObject> solutionFolders) {
-            List<string> unNestedProjects = new List<string>();
-            List<string> allNestedProjects = GetAllNestedProjectGuids(solutionFolders);
+        private List<SolutionFolderObject> BuildSolutionFoldersSkeleton(List<string> rootParents) {
+            List<SolutionFolderObject> temp = new List<SolutionFolderObject>();
+            foreach(string rootParent in rootParents) {
+                SolutionFolderObject sfo = new SolutionFolderObject {FolderGuid = rootParent};
+                temp.Add(sfo); 
+            }
+            return temp;
+        }
 
+        private List<string> BuildListOfProjectsNotInASolutionFolder(List<string> csprojLines, List<string> nestedProjects) {
+            List<string> unNestedProjects = new List<string>();
             foreach (string line in csprojLines) {
                 CSProjLine csprojLine = new CSProjLine(line);
-                if(!IsNested(allNestedProjects, csprojLine.ProjectGuid)) {
+                if(!nestedProjects.Contains(csprojLine.ProjectGuid)) {
                     unNestedProjects.Add(csprojLine.ProjectGuid);
                 }
             }
             return unNestedProjects;
-        }
-
-        private bool IsNested(List<string> allNestedProjects, string projectGuid) {
-            foreach(string nestedProjectGuid in allNestedProjects) {
-                if(projectGuid.Equals(nestedProjectGuid)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private List<string>  GetAllNestedProjectGuids(List<SolutionFolderObject> solutionFolders) {
-            List<string> list = new List<string>();
-            foreach(SolutionFolderObject folder in solutionFolders) {
-                list.AddRange(GetAllNestedProjectGuids(folder.NestedFolders));
-                foreach(string projectGuid in folder.NestedProjects) {
-                    list.Add(projectGuid);
-                }
-            }
-            return list;
         }
     }
 }

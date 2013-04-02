@@ -23,23 +23,9 @@
  * THE SOFTWARE.
  */
 #endregion
-
-using System.Collections.Generic;
-using objectified_solutions.parsers;
-
-namespace objectified_solutions.views.solutionview.solution {
-    public class SolutionFolderObject {
-        public string Name { get; set; }
-        public string FolderGuid { get; set; }
-        public List<SolutionFolderObject> NestedFolders { get; set; }
-        public List<string> NestedProjects { get; set; }
-
-        private bool HasNestedFolders(string projectGuid, List<string> nestedProjectsSection) {
-            return true;
-        }
-
-        private bool HasNestedProjects() {
-            return true;
-        }
+namespace objectified_solutions.views.solutionview.project {
+    public class NestedProject {
+        public string Parent { get; set; }
+        public string Child { get; set; }
     }
 }

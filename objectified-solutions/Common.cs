@@ -55,7 +55,7 @@ namespace objectified_solutions {
             return solutionFolders;
         }
 
-        public static List<string> GetNestedProjects(List<string> lines) {
+        public static List<string> GetNestedProjectsSectionAsLines(List<string> lines) {
             List<string> nestedProjects = new List<string>();
             bool sectionFound = false;
             foreach (string line in lines) {
