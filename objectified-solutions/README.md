@@ -20,3 +20,10 @@ The information currently gathered is:
 General Notes:
 - FileView object is the main object of the SolutionObject
 - SolutionView picks up the NestedProjects section of the sln file. If the SolutionView object is null it means that the solution does not have any solution folders defined.
+
+
+ReleaseNotes
+1.0.0.0 - Alpha
+1.0.0.1 - Added readme.md to NuGet package
+1.0.0.2 - Corrected description for NuGet package
+1.0.0.3 - Altered API.  Moved existing to FileView and added SolutionView.
