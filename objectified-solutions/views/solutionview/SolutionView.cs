@@ -61,8 +61,14 @@ namespace objectified_solutions.views.solutionview {
                     //Parent is not a Root Project
                     SolutionFolderObject sfo2 = FindFolder(SolutionFolders, nestedProject.Parent);
                     if (nestedProjectCollection.IsNestedProject(nestedProject.Child)) {
+                        if (sfo2.NestedProjects == null) {
+                            sfo2.NestedProjects = new List<string>();
+                        }
                         sfo2.NestedProjects.Add(nestedProject.Child);
                     } else {
+                        if (sfo2.NestedFolders == null) {
+                            sfo2.NestedFolders = new List<SolutionFolderObject>();
+                        }
                         sfo2.NestedFolders.Add(new SolutionFolderObject { FolderGuid = nestedProject.Child });
                     }
                 }
@@ -74,7 +80,7 @@ namespace objectified_solutions.views.solutionview {
         private SolutionFolderObject FindFolder(List<SolutionFolderObject> folders, string item) {
             foreach (SolutionFolderObject sfo in folders) {
                 if (sfo.NestedFolders != null) {
-                    FindFolder(sfo.NestedFolders, item);
+                    return FindFolder(sfo.NestedFolders, item);
                 }
                 if(item.Equals(sfo.FolderGuid)) {
                     return sfo;
