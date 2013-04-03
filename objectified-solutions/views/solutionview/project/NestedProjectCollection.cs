@@ -77,6 +77,14 @@ namespace objectified_solutions.views.solutionview.project {
             return Parents.Contains(item);
         }
 
+        public bool IsRootFolder(NestedProject nestedProject) {
+            return RootParents.Contains(nestedProject.Parent);
+        }
+
+        public bool IsNestedProject(string item) {
+            return NestedProjects.Contains(item);
+        }
+
         private string TrimProjectGuid(string s) {
             return s.Substring(1, s.Length - 2);
         }        

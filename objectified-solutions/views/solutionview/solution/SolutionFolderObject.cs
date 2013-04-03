@@ -34,12 +34,5 @@ namespace objectified_solutions.views.solutionview.solution {
         public List<SolutionFolderObject> NestedFolders { get; set; }
         public List<string> NestedProjects { get; set; }
 
-        private bool HasNestedFolders(string projectGuid, List<string> nestedProjectsSection) {
-            return true;
-        }
-
-        private bool HasNestedProjects() {
-            return true;
-        }
     }
 }
