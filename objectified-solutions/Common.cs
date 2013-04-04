@@ -24,19 +24,20 @@
  */
 #endregion
 using System.Collections.Generic;
+using System.Text;
 
 namespace objectified_solutions {
     public class Common {
         public static List<string> ApplyFilter(List<string> lines, string startsWith, string contains) {
             List<string> filteredLines = new List<string>();
             if (startsWith == null) {
-                foreach (string line in lines) {
-                    if (line.Contains(contains)) {
+                foreach(string line in lines) {
+                    if(line.Contains(contains)) {
                         filteredLines.Add(line);
                     }
                 }
             } else {
-                foreach (string line in lines) {
+                foreach(string line in lines) {
                     if (line.StartsWith(startsWith)) {
                         filteredLines.Add(line);
                     }
@@ -47,8 +48,8 @@ namespace objectified_solutions {
 
         public static List<string> GetSolutionFolders(List<string> lines) {
             List<string> solutionFolders = new List<string>();
-            foreach (string line in lines) {
-                if (!line.Contains(Constants.CSPROJ) && !line.Contains(Constants.WIXPROJ) && !line.Contains(Constants.DTPROJ)) {
+            foreach(string line in lines) {
+                if(!line.Contains(Constants.CSPROJ) && !line.Contains(Constants.WIXPROJ) && !line.Contains(Constants.DTPROJ)) {
                     solutionFolders.Add(line);
                 }
             }
@@ -64,7 +65,7 @@ namespace objectified_solutions {
                     continue;
                 }
                 if(sectionFound) {
-                    if (line.Contains("EndGlobalSection")) {
+                    if(line.Contains("EndGlobalSection")) {
                         sectionFound = false;
                     } else {
                         nestedProjects.Add(line);
@@ -72,6 +73,22 @@ namespace objectified_solutions {
                 }
             }
             return nestedProjects;
-        } 
+        }
+
+        public static string[] Split(string line) {
+            return line.Split(Constants.SPACE_CHAR);
+        }
+
+        public static string TrimToken(string s, int start, int lengthSubtractor) {
+            return s.Substring(start, s.Length - lengthSubtractor);
+        }
+
+        public static string Tabs(int numTabs) {
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < numTabs; i++) {
+                sb.Append(Constants.FOURSPACES);
+            }
+            return sb.ToString();
+        }
     }
 }

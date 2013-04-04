@@ -23,14 +23,17 @@
  * THE SOFTWARE.
  */
 #endregion
-
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using objectified_solutions.views.fileview;
+using objectified_solutions.views.fileview.project;
 using objectified_solutions.views.solutionview;
+using objectified_solutions.views.solutionview.project;
+using objectified_solutions.views.solutionview.solution;
 
 namespace objectified_solutions {
-    public class SolutionObject {
+    public sealed class SolutionObject {
         public string FormatVersion { get; set; }
         public string VSVersion { get; set; }
         public string Name { get; set; }
@@ -46,7 +49,70 @@ namespace objectified_solutions {
             VSVersion = lines[1].Substring(2);
 
             FileView = new FileView(lines, RootPath);
-            SolutionView = new SolutionView(lines, RootPath);
+            SolutionView = new SolutionView(lines);
+        }
+
+        public string SolutionDetails {
+            get {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Solution Format Version: " + FormatVersion);
+                sb.AppendLine("Solution will open in: " + VSVersion);
+                sb.AppendLine("Solution location: " + RootPath);
+                return sb.ToString();
+            }
+        }
+
+        public string FileViewDetails {
+            get {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Projects in " + Name + " solution:");
+                foreach (ProjectObject project in FileView.Projects) {
+                    sb.AppendLine("\tName: " + project.Name);
+                    sb.AppendLine("\tRelativePath: " + project.RelativePath);
+
+
+
+                    sb.AppendLine("\tNumber of Source Files: " + project.SourceFiles.Count);
+                    
+                    
+                    
+                    sb.AppendLine("\tNumber of System References: " + project.References.Count);
+                    sb.AppendLine("\tNumber of Project References: " + project.ProjectReferences.Count);
+                    sb.AppendLine("\t-------------");
+                }
+                return sb.ToString();
+            }
+        }
+
+        public string SolutionViewDetails {
+            get {
+                StringBuilder sb = new StringBuilder();
+                EmitSolutionFolder(sb, SolutionView.SolutionFolders, 0);
+                EmitProjectsNotInASolutionFolder(sb);
+                return sb.ToString();
+            }
+        }
+
+        private void EmitSolutionFolder(StringBuilder sb, List<SolutionFolderObject> sfos, int numTabs) {
+            foreach (SolutionFolderObject sfo in sfos) {
+                sb.Append(Common.Tabs(numTabs)).AppendLine(sfo.Name);
+                //Print out nested solution folders
+                if (sfo.HasNestedFolders()) {
+                    EmitSolutionFolder(sb, sfo.NestedFolders, numTabs + 1);
+                }
+                //Print out projects
+                if(sfo.HasNestedProjects()) {
+                    foreach(string projectGuid in sfo.NestedProjects) {
+                        sb.Append(Common.Tabs(numTabs + 1)).AppendLine(FileView.GetProjectName(projectGuid));
+                    }
+                }   
+            }
+        }
+
+        private void EmitProjectsNotInASolutionFolder(StringBuilder sb) {
+            foreach(string projectGuid in SolutionView.ProjectsNotInASolutionFolder) {
+                sb.AppendLine(FileView.GetProjectName(projectGuid));
+            }
         }
 
         private string GetRootPath(string slnFile) {
@@ -60,7 +126,7 @@ namespace objectified_solutions {
         }
 
         private string GetFormatVersion(string firstLine) {
-            string[] tokens = firstLine.Split(Constants.SPACE_CHAR);
+            string[] tokens = Common.Split(firstLine);
             return tokens[tokens.Length - 1];
         }
     }

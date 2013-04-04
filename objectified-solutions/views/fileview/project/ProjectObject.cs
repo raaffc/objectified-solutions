@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 #endregion
-
 using System.Collections.Generic;
 using objectified_solutions.views.fileview.source;
 

@@ -29,7 +29,7 @@ using objectified_solutions.views.fileview.project;
 using objectified_solutions.views.fileview.source;
 
 namespace objectified_solutions.parsers {
-    public class CSProjFileParser {
+    public class ProjFileParser {
         public static void Parse(string csprojFile, ProjectObject project) {
             XmlDocument doc = new XmlDocument();
             XmlNamespaceManager nsmgr = GetNsMgr(csprojFile);
@@ -44,8 +44,7 @@ namespace objectified_solutions.parsers {
             project.RootNamespace = GetProperty(properties, Constants.PROPERTY_ROOTNAMESPACE);
             project.TargetFrameworkVersion = GetProperty(properties, Constants.PROPERTY_TARGETFRAMEWORKVERSION);
             project.SchemaVersion = GetProperty(properties, Constants.PROPERTY_SCHEMAVERSION);
-            //project.ProjectGuid = GetProperty(properties, Constants.PROPERTY_PROJECTGUID);
-
+            
             XmlNodeList itemGroups = doc.SelectNodes("//msbuild:Project/msbuild:ItemGroup", nsmgr);
             ProcessItemGroups(itemGroups, project);
         }

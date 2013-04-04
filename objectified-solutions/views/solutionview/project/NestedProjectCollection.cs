@@ -27,21 +27,21 @@ using System.Collections.Generic;
 
 namespace objectified_solutions.views.solutionview.project {
     public class NestedProjectCollection {
-        public List<NestedProject> AllLines { get; set; }
-        public List<string> Children { get; set; }
-        public List<string> Parents { get; set; }
-        public List<string> RootParents { get; set; }
-        public List<string> NestedProjects { get; set; }
-        public List<string> NestedFolders { get; set; }
+        public static List<NestedProject> AllLines { get; set; }
+        public static List<string> Children { get; set; }
+        public static List<string> Parents { get; set; }
+        public static List<string> RootParents { get; set; }
+        public static List<string> NestedProjects { get; set; }
+        public static List<string> NestedFolders { get; set; }
 
-        public NestedProjectCollection(List<string> nestedProjects) {
+        public static void PopulateCollection(List<string> nestedProjects) {
             AllLines = new List<NestedProject>();
             Children = new List<string>();
             Parents = new List<string>();
             foreach (string line in nestedProjects) {
                 string trimmedLine = line.Trim();
                 string[] tokens = trimmedLine.Split(Constants.SPACE_CHAR);
-                NestedProject nestedProject = new NestedProject { Parent = TrimProjectGuid(tokens[2]), Child = TrimProjectGuid(tokens[0]) };
+                NestedProject nestedProject = new NestedProject { Parent = Common.TrimToken(tokens[2], 1, 2), Child = Common.TrimToken(tokens[0], 1, 2) };
                 AllLines.Add(nestedProject);
                 if(!Children.Contains(nestedProject.Child)) {
                     Children.Add(nestedProject.Child);
@@ -61,7 +61,7 @@ namespace objectified_solutions.views.solutionview.project {
             NestedProjects = new List<string>();
             NestedFolders = new List<string>();
             foreach(string child in Children) {
-                if(!Parents.Contains(child)) {
+                if(!IsParent(child)) {
                     NestedProjects.Add(child);
                 } else {
                     NestedFolders.Add(child);
@@ -69,24 +69,16 @@ namespace objectified_solutions.views.solutionview.project {
             }
         }
 
-        public bool IsChild(string item) {
-            return Children.Contains(item);
-        }
-
-        public bool IsParent(string item) {
+        private static bool IsParent(string item) {
             return Parents.Contains(item);
         }
 
-        public bool IsRootFolder(NestedProject nestedProject) {
+        public static bool IsRootFolder(NestedProject nestedProject) {
             return RootParents.Contains(nestedProject.Parent);
         }
 
-        public bool IsNestedProject(string item) {
+        public static bool IsNestedProject(string item) {
             return NestedProjects.Contains(item);
-        }
-
-        private string TrimProjectGuid(string s) {
-            return s.Substring(1, s.Length - 2);
         }        
     }
 }

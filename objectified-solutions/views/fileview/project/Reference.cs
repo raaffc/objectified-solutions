@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 #endregion
-
 namespace objectified_solutions.views.fileview.project {
     public class Reference : ReferenceBase {
         public bool SpecificVersion { get; set; }

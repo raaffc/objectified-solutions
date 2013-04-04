@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 #endregion
-
 namespace objectified_solutions.parsers {
     //Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installation", "Installation", "{1BC9248A-7F32-4816-95A4-2D3DB14CA300}"
     public class SolutionFolderLine {        
@@ -32,12 +31,8 @@ namespace objectified_solutions.parsers {
 
         public SolutionFolderLine(string solutionFolderLine) {
             string[] tokens = solutionFolderLine.Split(Constants.SPACE_CHAR);
-            Name = Trim(tokens[2], 1, tokens[2].Length - 3);
-            FolderGuid = Trim(tokens[4], 1, tokens[4].Length - 3);
-        }
-        
-        private string Trim(string s, int start, int end) {
-            return s.Substring(start, end);
+            Name = Common.TrimToken(tokens[2], 1, 3);
+            FolderGuid = Common.TrimToken(tokens[4], 1, 3);
         }
     }
 }

@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 #endregion
-
 namespace objectified_solutions.views.fileview.project {
     public class ProjectReference : ReferenceBase {
         public string ProjectGuid { get; set; }

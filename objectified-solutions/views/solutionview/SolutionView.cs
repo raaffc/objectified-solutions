@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 #endregion
-
 using System.Collections.Generic;
 using objectified_solutions.parsers;
 using objectified_solutions.views.solutionview.project;
@@ -34,49 +33,69 @@ namespace objectified_solutions.views.solutionview {
         public List<SolutionFolderObject> SolutionFolders { get; set; }
         public List<string> ProjectsNotInASolutionFolder { get; set; }
 
-        public SolutionView(List<string> lines, string rootPath) {
+        public SolutionView(List<string> lines) {
             List<string> allProjectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
             List<string> csprojLines = Common.ApplyFilter(allProjectLines, null, Constants.CSPROJ);
 
             List<string> nestedProjectLines = Common.GetNestedProjectsSectionAsLines(lines);
-            NestedProjectCollection nestedProjectCollection = new NestedProjectCollection(nestedProjectLines);
-            SolutionFolders = BuildSolutionFoldersSkeleton(nestedProjectCollection.RootParents);
+            NestedProjectCollection.PopulateCollection(nestedProjectLines);
+            SolutionFolders = BuildSolutionFoldersSkeleton(NestedProjectCollection.RootParents, allProjectLines);
 
             //Fill out SolutionFolders
-            foreach(NestedProject nestedProject in nestedProjectCollection.AllLines) {
-                if (nestedProjectCollection.IsRootFolder(nestedProject)) { //Check the parent
-                    SolutionFolderObject sfo = GetRootFolder(nestedProject.Parent);
-                    if(nestedProjectCollection.IsNestedProject(nestedProject.Child)) {
-                        if (sfo.NestedProjects == null) {
-                            sfo.NestedProjects = new List<string>();
-                        }
-                        sfo.NestedProjects.Add(nestedProject.Child);
-                    } else {
-                        if (sfo.NestedFolders == null) {
-                            sfo.NestedFolders = new List<SolutionFolderObject>();
-                        }
-                        sfo.NestedFolders.Add(new SolutionFolderObject { FolderGuid = nestedProject.Child });
-                    }
-                } else {
-                    //Parent is not a Root Project
-                    SolutionFolderObject sfo2 = FindFolder(SolutionFolders, nestedProject.Parent);
-                    if (nestedProjectCollection.IsNestedProject(nestedProject.Child)) {
-                        if (sfo2.NestedProjects == null) {
-                            sfo2.NestedProjects = new List<string>();
-                        }
-                        sfo2.NestedProjects.Add(nestedProject.Child);
-                    } else {
-                        if (sfo2.NestedFolders == null) {
-                            sfo2.NestedFolders = new List<SolutionFolderObject>();
-                        }
-                        sfo2.NestedFolders.Add(new SolutionFolderObject { FolderGuid = nestedProject.Child });
-                    }
-                }
+            foreach(NestedProject nestedProject in NestedProjectCollection.AllLines) {
+                SolutionFolderObject sfo = NestedProjectCollection.IsRootFolder(nestedProject) 
+                                               ? GetRootFolder(nestedProject.Parent) 
+                                               : FindFolder(SolutionFolders, nestedProject.Parent);
+                AddChildIntoStructure(sfo, nestedProject.Child, allProjectLines);
             }
 
-            ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines, nestedProjectCollection.NestedProjects);
+            ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines);
         }
-        
+
+        private List<SolutionFolderObject> BuildSolutionFoldersSkeleton(List<string> rootParents, List<string> allProjectLines) {
+            List<SolutionFolderObject> sfos = new List<SolutionFolderObject>();
+            foreach (string rootParent in rootParents) {
+                SolutionFolderObject sfo = new SolutionFolderObject { FolderGuid = rootParent, Name = GetName(allProjectLines, rootParent) };
+                sfos.Add(sfo);
+            }
+            return sfos;
+        }
+
+        private void AddChildIntoStructure(SolutionFolderObject sfo, string child, List<string> allProjectLines) {
+            if(NestedProjectCollection.IsNestedProject(child)) {
+                if(sfo.NestedProjects == null) {
+                    sfo.NestedProjects = new List<string>();
+                }
+                sfo.NestedProjects.Add(child);
+            } else {
+                if(sfo.NestedFolders == null) {
+                    sfo.NestedFolders = new List<SolutionFolderObject>();
+                }
+                sfo.NestedFolders.Add(new SolutionFolderObject { FolderGuid = child, Name = GetName(allProjectLines, child) });
+            }
+        }
+
+        private string GetName(List<string> allProjectLines, string folderGuid) {
+            string name = null;
+            foreach (string line in allProjectLines) {
+                name = ExtractName(line);
+                if(ExtractGuid(line).Equals(folderGuid)) {
+                    break;
+                }
+            }
+            return name;
+        }
+
+        private string ExtractName(string line) {
+            string[] tokens = Common.Split(line);
+            return Common.TrimToken(tokens[2], 1, 3);
+        }
+
+        private string ExtractGuid(string line) {
+            string[] tokens = Common.Split(line);
+            return Common.TrimToken(tokens[4], 2, 4);
+        }
+
         private SolutionFolderObject FindFolder(List<SolutionFolderObject> folders, string item) {
             foreach (SolutionFolderObject sfo in folders) {
                 if (sfo.NestedFolders != null) {
@@ -98,20 +117,11 @@ namespace objectified_solutions.views.solutionview {
             return null;
         }
 
-        private List<SolutionFolderObject> BuildSolutionFoldersSkeleton(List<string> rootParents) {
-            List<SolutionFolderObject> temp = new List<SolutionFolderObject>();
-            foreach(string rootParent in rootParents) {
-                SolutionFolderObject sfo = new SolutionFolderObject {FolderGuid = rootParent};
-                temp.Add(sfo); 
-            }
-            return temp;
-        }
-
-        private List<string> BuildListOfProjectsNotInASolutionFolder(List<string> csprojLines, List<string> nestedProjects) {
+        private List<string> BuildListOfProjectsNotInASolutionFolder(List<string> csprojLines) {
             List<string> unNestedProjects = new List<string>();
             foreach (string line in csprojLines) {
-                CSProjLine csprojLine = new CSProjLine(line);
-                if(!nestedProjects.Contains(csprojLine.ProjectGuid)) {
+                ProjectLine csprojLine = new ProjectLine(line);
+                if (!NestedProjectCollection.NestedProjects.Contains(csprojLine.ProjectGuid)) {
                     unNestedProjects.Add(csprojLine.ProjectGuid);
                 }
             }

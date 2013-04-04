@@ -28,6 +28,8 @@ namespace objectified_solutions {
         public const string OUTPUT_TYPE_DLL = "Library";
         public const string OUTPUT_TYPE_EXE = "EXE";
         public const string BACKSLASH = @"\";
+        public const string TAB = @"\t";
+        public const string FOURSPACES = "    ";
         public const string DOT = ".";
         public const string COMMA = ",";
         public const char SPACE_CHAR = ' ';

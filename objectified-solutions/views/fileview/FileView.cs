@@ -34,16 +34,37 @@ namespace objectified_solutions.views.fileview {
         public FileView(List<string> lines, string rootPath) {
             List<string> projectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
             List<string> csprojLines = Common.ApplyFilter(projectLines, null, Constants.CSPROJ);
-
+            List<string> wixprojLines = Common.ApplyFilter(projectLines, null, Constants.WIXPROJ);
+            
             Projects = new List<ProjectObject>();
             foreach (string line in csprojLines) {
-                CSProjLine csprojLine = new CSProjLine(line);
-                ProjectObject project = new ProjectObject { Name = csprojLine.Name, 
-                                                            RelativePath = csprojLine.RelativePath, 
-                                                            ProjectGuid = csprojLine.ProjectGuid};
-                CSProjFileParser.Parse(rootPath + project.RelativePath, project);
-                Projects.Add(project);
+                ProjectObject project = AddProject(line);
+                ProjFileParser.Parse(rootPath + project.RelativePath, project);
             }
+            foreach (string line in wixprojLines) {
+                ProjectObject project = AddProject(line);
+                ProjFileParser.Parse(rootPath + project.RelativePath, project);
+            }
+        }
+
+        private ProjectObject AddProject(string line) {
+            ProjectLine projectLine = new ProjectLine(line);
+            ProjectObject project = new ProjectObject { Name = projectLine.Name,
+                                                        RelativePath = projectLine.RelativePath,
+                                                        ProjectGuid = projectLine.ProjectGuid };
+            Projects.Add(project);
+            return project;
+        }
+
+        public string GetProjectName(string projectGuid) {
+            string name = string.Empty;
+            foreach(ProjectObject project in Projects) {
+                if(project.ProjectGuid.Equals(projectGuid)) {
+                    name = project.Name;
+                    break;
+                }
+            }
+            return name;
         }
     }
 }

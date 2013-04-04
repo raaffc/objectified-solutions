@@ -24,25 +24,19 @@
  */
 #endregion
 namespace objectified_solutions.parsers {
-    public class CSProjLine {
+    public class ProjectLine {
         //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eStoreAdminBLL", "eStoreAdminBLL\eStoreAdminBLL.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
+        //Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "eStoreAdmin", "eStoreAdminWix\eStoreAdmin.wixproj", "{8FE4FFF6-205F-4DCD-9823-6DB6904D63CA}"
+        //Project("{D183A3D8-5FD8-494B-B014-37F57B35E655}") = "UpdateExchangeRate3", "UpdateExchangeRate3\UpdateExchangeRate3.dtproj", "{10951775-2AA3-438D-99AA-1F8B9239E288}"
         public string Name { get; set; }
         public string RelativePath { get; set; }
         public string ProjectGuid { get; set; } //unique id
         
-        public CSProjLine(string line) {
-            string[] tokens = line.Split(' ');
-            Name = Trim(tokens[2]);
-            RelativePath = Trim(tokens[3]);
-            ProjectGuid = TrimProjectGuid(tokens[4]);
-        }
-
-        private string Trim(string s) {
-            return s.Substring(1, s.Length - 3);
-        }
-
-        private string TrimProjectGuid(string s) {
-            return s.Substring(2, s.Length - 4);
+        public ProjectLine(string line) {
+            string[] tokens = Common.Split(line);
+            Name = Common.TrimToken(tokens[2], 1, 3);
+            RelativePath = Common.TrimToken(tokens[3], 1, 3);
+            ProjectGuid = Common.TrimToken(tokens[4], 2, 4);
         }
     }
 }
