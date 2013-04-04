@@ -67,18 +67,12 @@ namespace objectified_solutions {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("Projects in " + Name + " solution:");
                 foreach (ProjectObject project in FileView.Projects) {
-                    sb.AppendLine("\tName: " + project.Name);
-                    sb.AppendLine("\tRelativePath: " + project.RelativePath);
-
-
-
-                    sb.AppendLine("\tNumber of Source Files: " + project.SourceFiles.Count);
-                    
-                    
-                    
-                    sb.AppendLine("\tNumber of System References: " + project.References.Count);
-                    sb.AppendLine("\tNumber of Project References: " + project.ProjectReferences.Count);
-                    sb.AppendLine("\t-------------");
+                    sb.AppendLine(Constants.FOURSPACES + "Name: " + project.Name);
+                    sb.AppendLine(Constants.FOURSPACES + "RelativePath: " + project.RelativePath);
+                    sb.AppendLine(Constants.FOURSPACES + "Number of Source Files: " + project.SourceFiles.Count);
+                    sb.AppendLine(Constants.FOURSPACES + "Number of System References: " + project.References.Count);
+                    sb.AppendLine(Constants.FOURSPACES + "Number of Project References: " + project.ProjectReferences.Count);
+                    sb.AppendLine(Constants.FOURSPACES + "-------------");
                 }
                 return sb.ToString();
             }
