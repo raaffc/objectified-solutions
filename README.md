@@ -22,8 +22,8 @@ General Notes:
 
 
 ReleaseNotes
-1.0.0.0 - Alpha release.
-1.0.0.1 - Added readme.md to NuGet package.
-1.0.0.2 - Corrected description for NuGet package.
-1.0.0.3 - Small tweaks.
-2.0.0.0 - Major release. Altered API.  Moved existing API to FileView namespace and added SolutionView namespace. Added support for wixproj files
+- 1.0.0.0: Alpha release.
+- 1.0.0.1: Added readme.md to NuGet package.
+- 1.0.0.2: Corrected description for NuGet package.
+- 1.0.0.3: Small tweaks.
+- 2.0.0.0: Major release. Altered API. Moved existing API to FileView namespace and added SolutionView namespace. Added support for wixproj files
