@@ -29,7 +29,6 @@ using System.Text;
 using objectified_solutions.views.fileview;
 using objectified_solutions.views.fileview.project;
 using objectified_solutions.views.solutionview;
-using objectified_solutions.views.solutionview.project;
 using objectified_solutions.views.solutionview.solution;
 
 namespace objectified_solutions {
