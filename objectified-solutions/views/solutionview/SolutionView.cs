@@ -46,7 +46,9 @@ namespace objectified_solutions.views.solutionview {
                 SolutionFolderObject sfo = NestedProjectCollection.IsRootFolder(nestedProject) 
                                                ? GetRootFolder(nestedProject.Parent) 
                                                : FindFolder(SolutionFolders, nestedProject.Parent);
-                AddChildIntoStructure(sfo, nestedProject.Child, allProjectLines);
+                if(sfo != null) {
+                    AddChildIntoStructure(sfo, nestedProject.Child, allProjectLines);
+                }
             }
 
             ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines);
