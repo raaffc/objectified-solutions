@@ -49,12 +49,7 @@ namespace objectified_solutions.views.solutionview {
                               : FindFolder(SolutionFolders, nestedProject.Parent);
                 if(sfo != null) {
                     AddChildIntoStructure(sfo, nestedProject.Child, allProjectLines);
-                } else {
-                    //Parent is not in the structure ye
-                    //sfo = FindParentOf(nestedProject.Child);
                 }
-
-
             }
 
             ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines);
