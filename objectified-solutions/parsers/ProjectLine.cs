@@ -25,9 +25,9 @@
 #endregion
 namespace objectified_solutions.parsers {
     public class ProjectLine {
-        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eStoreAdminBLL", "eStoreAdminBLL\eStoreAdminBLL.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
-        //Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "eStoreAdmin", "eStoreAdminWix\eStoreAdmin.wixproj", "{8FE4FFF6-205F-4DCD-9823-6DB6904D63CA}"
-        //Project("{D183A3D8-5FD8-494B-B014-37F57B35E655}") = "UpdateExchangeRate3", "UpdateExchangeRate3\UpdateExchangeRate3.dtproj", "{10951775-2AA3-438D-99AA-1F8B9239E288}"
+        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mycsproject", "path\to\mycsproject.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
+        //Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "mywixproject", "path\to\mywixproject.wixproj", "{8FE4FFF6-205F-4DCD-9823-6DB6904D63CA}"
+        //Project("{D183A3D8-5FD8-494B-B014-37F57B35E655}") = "mydtproject", "path\to\mydtproject.dtproj", "{10951775-2AA3-438D-99AA-1F8B9239E288}"
         public string Name { get; set; }
         public string RelativePath { get; set; }
         public string ProjectGuid { get; set; } //unique id
