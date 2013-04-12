@@ -23,11 +23,12 @@
  * THE SOFTWARE.
  */
 #endregion
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using objectified_solutions.views.fileview;
-using objectified_solutions.views.fileview.project;
 using objectified_solutions.views.solutionview;
 using objectified_solutions.views.solutionview.solution;
 
@@ -41,7 +42,7 @@ namespace objectified_solutions {
         public SolutionView SolutionView { get; set; }
 
         public SolutionObject(string slnFile) {
-            List<string> lines = new List<string>(File.ReadAllLines(slnFile));
+            var lines = new List<string>(File.ReadAllLines(slnFile));
             RootPath = GetRootPath(slnFile);
             Name = GetName(slnFile);
             FormatVersion = GetFormatVersion(lines[0]);
@@ -53,7 +54,7 @@ namespace objectified_solutions {
 
         public string SolutionDetails {
             get {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.AppendLine("Solution Format Version: " + FormatVersion);
                 sb.AppendLine("Solution will open in: " + VSVersion);
                 sb.AppendLine("Solution location: " + RootPath);
@@ -63,9 +64,9 @@ namespace objectified_solutions {
 
         public string FileViewDetails {
             get {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.AppendLine("Projects in " + Name + " solution:");
-                foreach (ProjectObject project in FileView.Projects) {
+                foreach (var project in FileView.Projects) {
                     sb.AppendLine(Constants.FOURSPACES + "Name: " + project.Name);
                     sb.AppendLine(Constants.FOURSPACES + "RelativePath: " + project.RelativePath);
                     sb.AppendLine(Constants.FOURSPACES + "Number of Source Files: " + project.SourceFiles.Count);
@@ -79,14 +80,14 @@ namespace objectified_solutions {
 
         public string SolutionViewDetails {
             get {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 EmitSolutionFolder(sb, SolutionView.SolutionFolders, 0);
                 EmitProjectsNotInASolutionFolder(sb);
                 return sb.ToString();
             }
         }
 
-        private void EmitSolutionFolder(StringBuilder sb, List<SolutionFolderObject> sfos, int numTabs) {
+        private void EmitSolutionFolder(StringBuilder sb, IEnumerable<SolutionFolderObject> sfos, int numTabs) {
             foreach (SolutionFolderObject sfo in sfos) {
                 sb.Append(Common.Tabs(numTabs)).AppendLine(sfo.Name);
                 //Print out nested solution folders
@@ -95,7 +96,7 @@ namespace objectified_solutions {
                 }
                 //Print out projects
                 if(sfo.HasNestedProjects()) {
-                    foreach(string projectGuid in sfo.NestedProjects) {
+                    foreach(var projectGuid in sfo.NestedProjects) {
                         sb.Append(Common.Tabs(numTabs + 1)).AppendLine(FileView.GetProjectName(projectGuid));
                     }
                 }   
@@ -109,12 +110,12 @@ namespace objectified_solutions {
         }
 
         private string GetRootPath(string slnFile) {
-            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH);
+            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
             return slnFile.Remove(lastSlash + 1);
         }
 
         private string GetName(string slnFile) {
-            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH);
+            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
             return slnFile.Substring(lastSlash + 1);
         }
 

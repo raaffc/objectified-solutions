@@ -32,12 +32,12 @@ namespace objectified_solutions.views.fileview {
         public List<ProjectObject> Projects { get; set; }
 
         public FileView(List<string> lines, string rootPath) {
-            List<string> projectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
-            List<string> csprojLines = Common.ApplyFilter(projectLines, null, Constants.CSPROJ);
-            List<string> wixprojLines = Common.ApplyFilter(projectLines, null, Constants.WIXPROJ);
+            var projectLines = Common.ApplyFilter(lines, Constants.PROJECT, null);
+            var csprojLines = Common.ApplyFilter(projectLines, null, Constants.CSPROJ);
+            var wixprojLines = Common.ApplyFilter(projectLines, null, Constants.WIXPROJ);
             
             Projects = new List<ProjectObject>();
-            foreach (string line in csprojLines) {
+            foreach (var line in csprojLines) {
                 ProjectObject project = AddProject(line);
                 ProjFileParser.Parse(rootPath + project.RelativePath, project);
             }
@@ -48,17 +48,17 @@ namespace objectified_solutions.views.fileview {
         }
 
         private ProjectObject AddProject(string line) {
-            ProjectLine projectLine = new ProjectLine(line);
-            ProjectObject project = new ProjectObject { Name = projectLine.Name,
-                                                        RelativePath = projectLine.RelativePath,
-                                                        ProjectGuid = projectLine.ProjectGuid };
+            var projectLine = new ProjectLine(line);
+            var project = new ProjectObject { Name = projectLine.Name,
+                                              RelativePath = projectLine.RelativePath,
+                                              ProjectGuid = projectLine.ProjectGuid };
             Projects.Add(project);
             return project;
         }
 
         public string GetProjectName(string projectGuid) {
             string name = string.Empty;
-            foreach(ProjectObject project in Projects) {
+            foreach(var project in Projects) {
                 if(project.ProjectGuid.Equals(projectGuid)) {
                     name = project.Name;
                     break;

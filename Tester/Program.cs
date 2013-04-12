@@ -32,7 +32,7 @@ namespace Tester {
             if(args.Length != 1) {
                 Console.WriteLine("Usage: Tester <path to .sln file>.");
             } else {
-                SolutionObject slnObj = new SolutionObject(args[0]);
+                var slnObj = new SolutionObject(args[0]);
                 Console.WriteLine(slnObj.SolutionDetails);
                 Console.WriteLine("File View");
                 Console.WriteLine("*********");

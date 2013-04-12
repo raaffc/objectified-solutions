@@ -23,13 +23,27 @@
  * THE SOFTWARE.
  */
 #endregion
+
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace objectified_solutions {
     public class Common {
+        public static void CheckNull(object var, string varName) {
+            if (var == null) {
+                throw new ArgumentNullException(varName);
+            }
+        }
+
+        public static string GetVariableName<T>(Expression<Func<T>> expr) {
+            var body = ((MemberExpression)expr.Body);
+            return body.Member.Name;
+        }
+
         public static List<string> ApplyFilter(List<string> lines, string startsWith, string contains) {
-            List<string> filteredLines = new List<string>();
+            var filteredLines = new List<string>();
             if (startsWith == null) {
                 foreach(string line in lines) {
                     if(line.Contains(contains)) {
@@ -47,7 +61,7 @@ namespace objectified_solutions {
         }
 
         public static List<string> GetSolutionFolders(List<string> lines) {
-            List<string> solutionFolders = new List<string>();
+            var solutionFolders = new List<string>();
             foreach(string line in lines) {
                 if(!line.Contains(Constants.CSPROJ) && !line.Contains(Constants.WIXPROJ) && !line.Contains(Constants.DTPROJ)) {
                     solutionFolders.Add(line);
@@ -57,7 +71,7 @@ namespace objectified_solutions {
         }
 
         public static List<string> GetNestedProjectsSectionAsLines(List<string> lines) {
-            List<string> nestedProjects = new List<string>();
+            var nestedProjects = new List<string>();
             bool sectionFound = false;
             foreach (string line in lines) {
                 if(line.Contains(Constants.NESTED_PROJECTS)) {
@@ -84,7 +98,7 @@ namespace objectified_solutions {
         }
 
         public static string Tabs(int numTabs) {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             for(int i = 0; i < numTabs; i++) {
                 sb.Append(Constants.FOURSPACES);
             }

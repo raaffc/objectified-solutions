@@ -30,7 +30,7 @@ namespace objectified_solutions.parsers {
         public string FolderGuid { get; set; }
 
         public SolutionFolderLine(string solutionFolderLine) {
-            string[] tokens = solutionFolderLine.Split(Constants.SPACE_CHAR);
+            var tokens = solutionFolderLine.Split(Constants.SPACE_CHAR);
             Name = Common.TrimToken(tokens[2], 1, 3);
             FolderGuid = Common.TrimToken(tokens[4], 1, 3);
         }

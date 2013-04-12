@@ -33,7 +33,7 @@ namespace objectified_solutions.parsers {
         public string ProjectGuid { get; set; } //unique id
         
         public ProjectLine(string line) {
-            string[] tokens = Common.Split(line);
+            var tokens = Common.Split(line);
             Name = Common.TrimToken(tokens[2], 1, 3);
             RelativePath = Common.TrimToken(tokens[3], 1, 3);
             ProjectGuid = Common.TrimToken(tokens[4], 2, 4);

@@ -38,10 +38,11 @@ namespace objectified_solutions.views.solutionview.project {
             AllLines = new List<NestedProject>();
             Children = new List<string>();
             Parents = new List<string>();
+
             foreach (string line in nestedProjects) {
                 string trimmedLine = line.Trim();
                 string[] tokens = trimmedLine.Split(Constants.SPACE_CHAR);
-                NestedProject nestedProject = new NestedProject { Parent = Common.TrimToken(tokens[2], 1, 2), Child = Common.TrimToken(tokens[0], 1, 2) };
+                var nestedProject = new NestedProject { Parent = Common.TrimToken(tokens[2], 1, 2), Child = Common.TrimToken(tokens[0], 1, 2) };
                 AllLines.Add(nestedProject);
                 if(!Children.Contains(nestedProject.Child)) {
                     Children.Add(nestedProject.Child);
@@ -52,7 +53,7 @@ namespace objectified_solutions.views.solutionview.project {
             }
 
             RootParents = new List<string>();
-            foreach(string parent in Parents) {
+            foreach(var parent in Parents) {
                 if(!Children.Contains(parent)) {
                     RootParents.Add(parent);
                 }
@@ -60,7 +61,7 @@ namespace objectified_solutions.views.solutionview.project {
 
             NestedProjects = new List<string>();
             NestedFolders = new List<string>();
-            foreach(string child in Children) {
+            foreach(var child in Children) {
                 if(!IsParent(child)) {
                     NestedProjects.Add(child);
                 } else {
