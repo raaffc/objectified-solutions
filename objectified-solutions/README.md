@@ -3,7 +3,7 @@ objectified-solutions
 
 Solution File Object Modeller
 
-This class library produces an navigatable object graph of an Visual Studio solution (.sln file) and subordinate project(s) (.csproj file(s)).
+This class library produces an navigatable object graph of a Visual Studio solution (.sln file) and subordinate project(s) (.csproj file(s)).
 
 The information currently gathered is:
 
