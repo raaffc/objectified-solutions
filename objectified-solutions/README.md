@@ -27,3 +27,4 @@ Release Notes:
 - 1.0.0.2: Corrected description for NuGet package.
 - 1.0.0.3: Small tweaks.
 - 2.0.0.0: Major release. Altered API. Moved existing API to FileView namespace and added SolutionView namespace. Added support for wixproj files
+- 2.0.0.1: Fixed display of multiple levels of nesting in SolutionView
