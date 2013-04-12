@@ -24,7 +24,6 @@
  */
 #endregion
 
-using System;
 using System.Collections.Generic;
 using objectified_solutions.parsers;
 using objectified_solutions.views.solutionview.project;
@@ -45,26 +44,42 @@ namespace objectified_solutions.views.solutionview {
 
             //Fill out SolutionFolders
             foreach(var nestedProject in NestedProjectCollection.AllLines) {
-                var sfo = NestedProjectCollection.IsRootFolder(nestedProject) 
-                            ? GetRootFolder(nestedProject.Parent) 
-                            : FindFolder(SolutionFolders, nestedProject.Parent);
+                var sfo = NestedProjectCollection.IsRootFolder(nestedProject)
+                              ? GetRootFolder(nestedProject.Parent)
+                              : FindFolder(SolutionFolders, nestedProject.Parent);
                 if(sfo != null) {
                     AddChildIntoStructure(sfo, nestedProject.Child, allProjectLines);
+                } else {
+                    //Parent is not in the structure ye
+                    //sfo = FindParentOf(nestedProject.Child);
                 }
+
+
             }
 
             ProjectsNotInASolutionFolder = BuildListOfProjectsNotInASolutionFolder(csprojLines);
         }
 
-        private List<SolutionFolderObject> BuildSolutionFoldersSkeleton(IEnumerable<string> rootParents, List<string> allProjectLines) {
+        private static List<SolutionFolderObject> BuildSolutionFoldersSkeleton(IEnumerable<string> rootParents, List<string> allProjectLines) {
+            //This needs to create all nested folders not just the rootParents. Utilise NestedProjectCollection.NestedFolders
             Common.CheckNull(rootParents, "rootParents");
             Common.CheckNull(allProjectLines, "allProjectLines");
+            //int foldersToBePlaced = NestedProjectCollection.NestedFolders.Count;
+            //int foldersPlaced = 0;
 
             var sfos = new List<SolutionFolderObject>();
             foreach (var rootParent in rootParents) {
                 var sfo = new SolutionFolderObject { FolderGuid = rootParent, Name = GetName(allProjectLines, rootParent) };
                 sfos.Add(sfo);
             }
+
+            //var tempCopyOfNestedFolders = new List<string>(NestedProjectCollection.NestedFolders);
+
+            //while (foldersPlaced != foldersToBePlaced) {
+            //    foreach(var nestedFolder in tempCopyOfNestedFolders) {
+            //        PlaceNestedFolderInStructure(nestedFolder, sfos);
+            //    }
+            //}
             return sfos;
         }
 
@@ -78,16 +93,13 @@ namespace objectified_solutions.views.solutionview {
                 if(sfo.NestedFolders == null) {
                     sfo.NestedFolders = new List<SolutionFolderObject>();
                 }
-                sfo.NestedFolders.Add(new SolutionFolderObject { FolderGuid = child, Name = GetName(allProjectLines, child) });
+                sfo.NestedFolders.Add(new SolutionFolderObject {FolderGuid = child, Name = GetName(allProjectLines, child)});
             }
         }
 
-        private string GetName(IEnumerable<string> allProjectLines, string folderGuid) {
-            if(allProjectLines == null) {
-                throw new ArgumentNullException("allProjectLines");
-            }
+        private static string GetName(IEnumerable<string> allProjectLines, string folderGuid) {
             string name = null;
-            foreach (var line in allProjectLines) {
+            foreach(var line in allProjectLines) {
                 name = ExtractName(line);
                 if(ExtractGuid(line).Equals(folderGuid)) {
                     break;
@@ -107,24 +119,22 @@ namespace objectified_solutions.views.solutionview {
         }
 
         private static SolutionFolderObject FindFolder(IEnumerable<SolutionFolderObject> folders, string item) {
-            if(folders == null) {
-                throw new ArgumentNullException("folders");
-            }
-            foreach (var sfo in folders) {
-                if (sfo.NestedFolders != null) {
-                    return FindFolder(sfo.NestedFolders, item);
-                }
-                if(item.Equals(sfo.FolderGuid)) {
+            SolutionFolderObject result = null;
+            foreach(var sfo in folders) {
+                if (item.Equals(sfo.FolderGuid)) {
                     return sfo;
                 }
+                if(sfo.NestedFolders != null) {
+                    result = FindFolder(sfo.NestedFolders, item);
+                    if(result != null) {
+                        break;
+                    }
+                }
             }
-            return null;
+            return result;
         }
 
         private SolutionFolderObject GetRootFolder(string item) {
-            if(item == null) {
-                throw new ArgumentNullException("item");
-            }
             foreach(var sfo in SolutionFolders) {
                 if(item.Equals(sfo.FolderGuid)) {
                     return sfo;
@@ -135,9 +145,9 @@ namespace objectified_solutions.views.solutionview {
 
         private List<string> BuildListOfProjectsNotInASolutionFolder(IEnumerable<string> csprojLines) {
             var unNestedProjects = new List<string>();
-            foreach (var line in csprojLines) {
+            foreach(var line in csprojLines) {
                 var csprojLine = new ProjectLine(line);
-                if (!NestedProjectCollection.NestedProjects.Contains(csprojLine.ProjectGuid)) {
+                if(!NestedProjectCollection.NestedProjects.Contains(csprojLine.ProjectGuid)) {
                     unNestedProjects.Add(csprojLine.ProjectGuid);
                 }
             }

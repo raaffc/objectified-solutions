@@ -39,9 +39,9 @@ namespace objectified_solutions.views.solutionview.project {
             Children = new List<string>();
             Parents = new List<string>();
 
-            foreach (string line in nestedProjects) {
-                string trimmedLine = line.Trim();
-                string[] tokens = trimmedLine.Split(Constants.SPACE_CHAR);
+            foreach (var line in nestedProjects) {
+                var trimmedLine = line.Trim();
+                var tokens = trimmedLine.Split(Constants.SPACE_CHAR);
                 var nestedProject = new NestedProject { Parent = Common.TrimToken(tokens[2], 1, 2), Child = Common.TrimToken(tokens[0], 1, 2) };
                 AllLines.Add(nestedProject);
                 if(!Children.Contains(nestedProject.Child)) {
