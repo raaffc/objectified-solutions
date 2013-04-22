@@ -58,7 +58,7 @@ namespace objectified_solutions.parsers {
             project.SourceFiles = new List<SourceCodeFile>();
             project.ProjectReferences = new List<ProjectReference>();
             foreach(XmlNode itemGroup in itemGroups) {
-                XmlNodeList childNodes = itemGroup.ChildNodes;
+                var childNodes = itemGroup.ChildNodes;
                 if(childNodes.Count > 0) {
                     switch(childNodes[0].Name) {
                         case Constants.ITEM_GROUP_REFERENCE:
@@ -83,10 +83,10 @@ namespace objectified_solutions.parsers {
         private static void ProcessReferenceItems(XmlNodeList nodes, ProjectObject project) {
             foreach (XmlNode node in nodes) {
                 if(node.Attributes != null) {
-                    string name = GetName(node.Attributes[0]);
-                    string specificVersionString = GetProperty(node, Constants.PROPERTY_SPECIFICVERSION);
-                    bool specificVersion = specificVersionString != null && bool.Parse(specificVersionString);
-                    string hintPath = GetProperty(node, Constants.PROPERTY_HINTPATH);
+                    var name = GetName(node.Attributes[0]);
+                    var specificVersionString = GetProperty(node, Constants.PROPERTY_SPECIFICVERSION);
+                    var specificVersion = specificVersionString != null && bool.Parse(specificVersionString);
+                    var hintPath = GetProperty(node, Constants.PROPERTY_HINTPATH);
                     var reference = new Reference { Name = name, SpecificVersion = specificVersion, HintPath = hintPath };
                     project.References.Add(reference);
                 }
@@ -101,10 +101,10 @@ namespace objectified_solutions.parsers {
                     var relativePath = GetRelativePath(node.Attributes[0]);
                     var subType = GetProperty(node, Constants.PROPERTY_SUBTYPE);
                     if(itemType.Equals(Constants.ITEM_GROUP_COMPILE)) {
-                        string dependentUpon = GetProperty(node, Constants.PROPERTY_DEPENDENTUPON);
+                        var dependentUpon = GetProperty(node, Constants.PROPERTY_DEPENDENTUPON);
                         sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = true, SubType = subType, DependentUpon = dependentUpon };
                     } else {
-                        string copyToOutputDirectory = GetProperty(node, Constants.PROPERTY_COPYTOOUTPUTDIRECTORY);
+                        var copyToOutputDirectory = GetProperty(node, Constants.PROPERTY_COPYTOOUTPUTDIRECTORY);
                         sourceFile = new SourceCodeFile { FileName = filename, RelativePath = relativePath, IsCompiled = false, SubType = subType, CopyToOutputDirectory = copyToOutputDirectory };
                     }
                 }
@@ -125,7 +125,7 @@ namespace objectified_solutions.parsers {
         }
 
         private static string GetName(XmlAttribute attribute) {
-            string name = attribute.Value;
+            var name = attribute.Value;
             if(!name.Contains(Constants.COMMA)) {
                 return name;
             }

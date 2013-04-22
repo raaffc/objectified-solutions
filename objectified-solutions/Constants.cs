@@ -44,6 +44,7 @@ namespace objectified_solutions {
         public const string ITEM_GROUP_REFERENCE = "Reference";
         public const string ITEM_GROUP_CONTENT = "Content";
         public const string ITEM_GROUP_COMPILE = "Compile";
+        public const string ITEM_GROUP_NONE = "None";
         public const string ITEM_GROUP_PROJECTREFERENCE = "ProjectReference";
         public const string ITEM_GROUP_BOOTSTRAPPERPACKAGE = "BootstrapperPackage";
 
