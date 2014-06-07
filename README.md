@@ -1,5 +1,10 @@
-objectified-solutions
-=====================
+#Objectified Solutions
+
+[![Support us][gittip-image]][gittip-url]
+
+## Like what you see?
+[Support us via gittip](https://www.gittip.com/agray/)
+
 
 Solution File Object Modeller
 
@@ -27,3 +32,6 @@ Release Notes:
 - 1.0.0.2: Corrected description for NuGet package.
 - 1.0.0.3: Small tweaks.
 - 2.0.0.0: Major release. Altered API. Moved existing API to FileView namespace and added SolutionView namespace. Added support for wixproj files
+
+[gittip-image]: http://img.shields.io/gittip/agray.svg
+[gittip-url]: https://www.gittip.com/agray/
