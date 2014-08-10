@@ -8,11 +8,12 @@
     <owners>Andrew Gray</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-		Solution File Object Modeller.
-		objectified-solutions produces a navigable object graph of a Visual Studio solution and project files.
-		Commercial version: HydratedSolutions. Web and console interface. Available at fullcirclesolutions.com.au</description>
+      Solution File Object Modeller.
+      objectified-solutions produces a navigable object graph of a Visual Studio solution and project files.
+      Commercial version: HydratedSolutions. Web and console interface. Available at fullcirclesolutions.com.au
+    </description>
     <releaseNotes>Initial release</releaseNotes>
-    <copyright>Copyright 2013</copyright>
+    <copyright>Copyright 2014</copyright>
     <tags>Solution Object Model</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Core" targetFramework="net40" />
@@ -21,6 +22,6 @@
   </metadata>
   <files>
     <file src="bin\Release\objectified-solutions.dll" target="lib\net40\" />
-	<file src="README.md" target="lib\net40\" />
+  <file src="README.md" target="lib\net40\" />
   </files>
 </package>
