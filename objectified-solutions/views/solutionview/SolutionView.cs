@@ -141,7 +141,7 @@ namespace objectified_solutions.views.solutionview {
         private List<string> BuildListOfProjectsNotInASolutionFolder(IEnumerable<string> csprojLines) {
             var unNestedProjects = new List<string>();
             foreach(var line in csprojLines) {
-                var csprojLine = new ProjectLine(line);
+                var csprojLine = new SolutionFileProjectEntry(line);
                 if(!NestedProjectCollection.NestedProjects.Contains(csprojLine.ProjectGuid)) {
                     unNestedProjects.Add(csprojLine.ProjectGuid);
                 }

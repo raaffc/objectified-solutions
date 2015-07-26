@@ -38,11 +38,14 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="parsers\ProjFileParser.cs" />
-    <Compile Include="parsers\ProjectLine.cs" />
+    <Compile Include="parsers\CppProjFileParser.cs" />
+    <Compile Include="parsers\CSProjFileParser.cs" />
+    <Compile Include="parsers\IProjectFileParser.cs" />
+    <Compile Include="parsers\ProjectParserHelper.cs" />
+    <Compile Include="parsers\SolutionFileProjectEntry.cs" />
     <Compile Include="parsers\SolutionFolderLine.cs" />
     <Compile Include="views\fileview\FileView.cs" />
-    <Compile Include="views\fileview\project\ProjectObject.cs" />
+    <Compile Include="views\fileview\project\Project.cs" />
     <Compile Include="views\fileview\project\ProjectReference.cs" />
     <Compile Include="views\fileview\project\Reference.cs" />
     <Compile Include="views\fileview\project\ReferenceBase.cs" />
@@ -50,7 +53,7 @@
     <Compile Include="views\solutionview\project\NestedProject.cs" />
     <Compile Include="views\solutionview\project\NestedProjectCollection.cs" />
     <Compile Include="views\solutionview\solution\SolutionFolderObject.cs" />
-    <Compile Include="SolutionObject.cs" />
+    <Compile Include="Solution.cs" />
     <Compile Include="views\solutionview\SolutionView.cs" />
     <Compile Include="views\fileview\source\SourceCodeFile.cs" />
   </ItemGroup>

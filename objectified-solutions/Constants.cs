@@ -24,6 +24,12 @@
  */
 #endregion
 namespace objectified_solutions {
+    public enum ProjectLanguageTypes{
+        Unknown,
+        Cs,
+        Cpp
+    }
+
     public class Constants {
         public const string OUTPUT_TYPE_DLL = "Library";
         public const string OUTPUT_TYPE_EXE = "EXE";
@@ -36,6 +42,7 @@ namespace objectified_solutions {
 
         public const string PROJECT = "Project";
         public const string CSPROJ = "csproj";
+        public const string CPPPROJ = "vcxproj";
         public const string WIXPROJ = "wixproj";
         public const string DTPROJ = "dtproj";
         public const string MSBUILD = "msbuild";
@@ -47,6 +54,10 @@ namespace objectified_solutions {
         public const string ITEM_GROUP_NONE = "None";
         public const string ITEM_GROUP_PROJECTREFERENCE = "ProjectReference";
         public const string ITEM_GROUP_BOOTSTRAPPERPACKAGE = "BootstrapperPackage";
+
+        public const string ITEM_GROUP_CPPINCLUDE = "ClInclude";
+        public const string ITEM_GROUP_CPPCOMPILE = "ClCompile";
+        public const string ITEM_GROUP_RESOURCECOMPILE = "ResourceCompile";
 
         public const string PROPERTY_PROJECT = "Project";
         public const string PROPERTY_OUTPUTTYPE = "OutputType";

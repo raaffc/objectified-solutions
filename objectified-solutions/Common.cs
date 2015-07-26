@@ -45,13 +45,13 @@ namespace objectified_solutions {
         public static List<string> ApplyFilter(List<string> lines, string startsWith, string contains) {
             var filteredLines = new List<string>();
             if (startsWith == null) {
-                foreach(string line in lines) {
+                foreach(var line in lines) {
                     if(line.Contains(contains)) {
                         filteredLines.Add(line);
                     }
                 }
             } else {
-                foreach(string line in lines) {
+                foreach(var line in lines) {
                     if (line.StartsWith(startsWith)) {
                         filteredLines.Add(line);
                     }
@@ -62,7 +62,7 @@ namespace objectified_solutions {
 
         public static List<string> GetSolutionFolders(List<string> lines) {
             var solutionFolders = new List<string>();
-            foreach(string line in lines) {
+            foreach(var line in lines) {
                 if(!line.Contains(Constants.CSPROJ) && !line.Contains(Constants.WIXPROJ) && !line.Contains(Constants.DTPROJ)) {
                     solutionFolders.Add(line);
                 }
@@ -72,8 +72,8 @@ namespace objectified_solutions {
 
         public static List<string> GetNestedProjectsSectionAsLines(List<string> lines) {
             var nestedProjects = new List<string>();
-            bool sectionFound = false;
-            foreach (string line in lines) {
+            var sectionFound = false;
+            foreach (var line in lines) {
                 if(line.Contains(Constants.NESTED_PROJECTS)) {
                     sectionFound = true;
                     continue;
@@ -99,7 +99,7 @@ namespace objectified_solutions {
 
         public static string Tabs(int numTabs) {
             var sb = new StringBuilder();
-            for(int i = 0; i < numTabs; i++) {
+            for(var i = 0; i < numTabs; i++) {
                 sb.Append(Constants.FOURSPACES);
             }
             return sb.ToString();

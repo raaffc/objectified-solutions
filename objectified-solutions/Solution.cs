@@ -29,19 +29,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using objectified_solutions.views.fileview;
+using objectified_solutions.views.fileview.project;
 using objectified_solutions.views.solutionview;
 using objectified_solutions.views.solutionview.solution;
 
 namespace objectified_solutions {
-    public sealed class SolutionObject {
+    public sealed class Solution {
         public string FormatVersion { get; set; }
         public string VSVersion { get; set; }
         public string Name { get; set; }
         public string RootPath { get; set; }
         public FileView FileView { get; set; }
+        public IEnumerable<Project> Projects { get { return FileView?.Projects; } }
         public SolutionView SolutionView { get; set; }
 
-        public SolutionObject(string slnFile) {
+        public Solution(string slnFile) {
             var lines = new List<string>(File.ReadAllLines(slnFile));
             RootPath = GetRootPath(slnFile);
             Name = GetName(slnFile);
@@ -88,7 +90,7 @@ namespace objectified_solutions {
         }
 
         private void EmitSolutionFolder(StringBuilder sb, IEnumerable<SolutionFolderObject> sfos, int numTabs) {
-            foreach (SolutionFolderObject sfo in sfos) {
+            foreach (var sfo in sfos) {
                 sb.Append(Common.Tabs(numTabs)).AppendLine(sfo.Name);
                 //Print out nested solution folders
                 if (sfo.HasNestedFolders()) {
@@ -104,23 +106,23 @@ namespace objectified_solutions {
         }
 
         private void EmitProjectsNotInASolutionFolder(StringBuilder sb) {
-            foreach(string projectGuid in SolutionView.ProjectsNotInASolutionFolder) {
+            foreach(var projectGuid in SolutionView.ProjectsNotInASolutionFolder) {
                 sb.AppendLine(FileView.GetProjectName(projectGuid));
             }
         }
 
         private string GetRootPath(string slnFile) {
-            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
+            var lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
             return slnFile.Remove(lastSlash + 1);
         }
 
         private string GetName(string slnFile) {
-            int lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
+            var lastSlash = slnFile.LastIndexOf(Constants.BACKSLASH, StringComparison.Ordinal);
             return slnFile.Substring(lastSlash + 1);
         }
 
         private string GetFormatVersion(string firstLine) {
-            string[] tokens = Common.Split(firstLine);
+            var tokens = Common.Split(firstLine);
             return tokens[tokens.Length - 1];
         }
     }

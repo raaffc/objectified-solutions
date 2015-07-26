@@ -23,20 +23,27 @@
  * THE SOFTWARE.
  */
 #endregion
-namespace objectified_solutions.parsers {
-    public class ProjectLine {
-        //Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mycsproject", "path\to\mycsproject.csproj", "{95B7703A-54F2-43FC-8664-E648E51B86E6}"
-        //Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "mywixproject", "path\to\mywixproject.wixproj", "{8FE4FFF6-205F-4DCD-9823-6DB6904D63CA}"
-        //Project("{D183A3D8-5FD8-494B-B014-37F57B35E655}") = "mydtproject", "path\to\mydtproject.dtproj", "{10951775-2AA3-438D-99AA-1F8B9239E288}"
+using System.Collections.Generic;
+using objectified_solutions.views.fileview.source;
+
+namespace objectified_solutions.views.fileview.project {
+    public class Project {
         public string Name { get; set; }
-        public string RelativePath { get; set; }
         public string ProjectGuid { get; set; } //unique id
-        
-        public ProjectLine(string line) {
-            var tokens = Common.Split(line);
-            Name = Common.TrimToken(tokens[2], 1, 3);
-            RelativePath = Common.TrimToken(tokens[3], 1, 3);
-            ProjectGuid = Common.TrimToken(tokens[4], 2, 4);
-        }
+        public string RelativePath { get; set; }
+        public string FullPath { get; set; }
+        public string OutputType { get; set; }
+        public string Configuration { get; set; }
+        public string Platform { get; set; }
+        public string ProductVersion { get; set; }
+        public string RootNamespace { get; set; }
+        public string TargetFrameworkVersion { get; set; }
+        public string SchemaVersion { get; set; }
+        public string FileExtension { get; set; }
+        public ProjectLanguageTypes ProjectLanguage { get; set; }
+                
+        public List<SourceCodeFile> SourceFiles { get; set; }
+        public List<Reference> References { get; set; }
+        public List<ProjectReference> ProjectReferences { get; set; }
     }
 }
